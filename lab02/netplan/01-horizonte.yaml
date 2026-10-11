@@ -1,0 +1,11 @@
+# /etc/netplan/01-horizonte.yaml — IP fija del servidor en la red del laboratorio (SOLO en la máquina virtual).
+# Aplicar con:  sudo netplan try   (si pierdes la conexión, en 120 s vuelve a la configuración anterior)
+# Permisos:     sudo chmod 600 /etc/netplan/01-horizonte.yaml
+network:
+  version: 2
+  ethernets:
+    enp0s3:                      # adaptador NAT de VirtualBox: sale a internet por DHCP
+      dhcp4: true
+    enp0s8:                      # adaptador "solo anfitrión": red del laboratorio
+      dhcp4: false
+      addresses: [192.168.56.10/24]   # IP fija del laboratorio (solo VM; en Docker no aplica)

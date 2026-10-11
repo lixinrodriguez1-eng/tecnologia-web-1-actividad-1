@@ -1,0 +1,24 @@
+# /etc/systemd/system/horizonte-eco.service — El servidor de eco del Laboratorio 1 como servicio del sistema.
+# Activar:  sudo systemctl daemon-reload && sudo systemctl enable --now horizonte-eco
+[Unit]
+Description=API de eco de la U.E. Horizonte (detras de Nginx)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+Environment=PUERTO_ECO=8081
+# Sin la siguiente línea, los print() de Python tardan en aparecer en journalctl
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /opt/horizonte/servidor_eco.py
+Restart=on-failure
+RestartSec=2
+# Endurecimiento básico: el servicio no puede escribir en el sistema ni ver /home
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
